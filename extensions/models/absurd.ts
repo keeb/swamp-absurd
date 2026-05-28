@@ -192,7 +192,7 @@ interface MethodContext {
 /** Model definition for the `@keeb/absurd` task-queue client. */
 export const model = {
   type: "@keeb/absurd",
-  version: "2026.05.27.2",
+  version: "2026.05.27.1",
   globalArguments: GlobalArgsSchema,
 
   resources: {
