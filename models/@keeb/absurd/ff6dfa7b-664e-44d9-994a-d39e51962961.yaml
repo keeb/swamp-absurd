@@ -1,0 +1,10 @@
+type: '@keeb/absurd'
+typeVersion: 2026.05.27.2
+id: ff6dfa7b-664e-44d9-994a-d39e51962961
+name: absurd-wf
+version: 1
+tags: {}
+globalArguments:
+  connectionString: 'postgresql://absurd:absurd@localhost:5432/absurd'
+  queue: wftest
+methods: {}

@@ -1,0 +1,17 @@
+manifestVersion: 1
+name: "@keeb/absurd"
+version: "2026.05.27.2"
+description: "Drive an Absurd Postgres-based durable-execution task queue from swamp — spawn tasks, poll status, await results, emit events, cancel, and list."
+repository: https://github.com/keeb/swamp-absurd
+labels:
+  - absurd
+  - durable-execution
+  - postgres
+  - workflow
+  - queue
+platforms: []
+additionalFiles:
+  - README.md
+  - LICENSE.txt
+models:
+  - absurd.ts

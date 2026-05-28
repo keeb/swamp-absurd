@@ -1,0 +1,13 @@
+{
+  "name": "absurd-swamp-workflow-orchestration",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Proves swamp can ORCHESTRATE a durable absurd task via a swamp workflow (DAG) with CEL data-chaining. A worker runs the durable `greet` task on queue `wftest`; a swamp workflow spawns -> emits -> awaits the result.",
+  "scripts": {
+    "worker": "node worker.ts"
+  },
+  "dependencies": {
+    "pg": "8.13.1"
+  }
+}

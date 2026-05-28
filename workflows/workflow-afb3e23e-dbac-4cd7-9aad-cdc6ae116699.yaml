@@ -1,0 +1,74 @@
+id: afb3e23e-dbac-4cd7-9aad-cdc6ae116699
+name: absurd-orchestrate
+description: >-
+  Orchestrate a durable Absurd task through a swamp workflow DAG. The workflow
+  spawns the `greet` task (queue wftest), emits its approval event, then blocks
+  on awaitResult until the task completes. The taskId produced by SPAWN is
+  chained into COLLECT via a CEL data expression, proving cross-step data flow.
+tags: {}
+version: 1
+inputs:
+  properties:
+    name:
+      type: string
+      default: world
+      description: Name passed to the greet task; also keys the approval event.
+    approver:
+      type: string
+      default: swamp-workflow
+      description: Approver recorded in the emitted approval event payload.
+  required: []
+jobs:
+  - name: orchestrate
+    description: Spawn -> emit -> await the durable greet task.
+    dependsOn: []
+    steps:
+      # 1) SPAWN: enqueue the durable task. Writes a `task` resource (spec
+      #    name "task") whose attributes include the new taskId.
+      - name: spawn
+        description: Spawn the durable greet task onto queue wftest.
+        task:
+          type: model_method
+          modelIdOrName: absurd-wf
+          methodName: spawn
+          inputs:
+            taskName: greet
+            params:
+              name: ${{ inputs.name }}
+        dependsOn: []
+
+      # 2) EMIT: deliver the approval event the task awaits. Events are
+      #    first-emit-wins and cached, so emitting before the task reaches
+      #    its awaitEvent is safe. Depends on SPAWN succeeding.
+      - name: emit
+        description: Emit the approve:<name> event the greet task awaits.
+        task:
+          type: model_method
+          modelIdOrName: absurd-wf
+          methodName: emitEvent
+          inputs:
+            eventName: ${{ "approve:" + inputs.name }}
+            payload:
+              approver: ${{ inputs.approver }}
+              note: approved via swamp workflow
+        dependsOn:
+          - step: spawn
+            condition:
+              type: succeeded
+
+      # 3) COLLECT: block until the task reaches a terminal state, then
+      #    persist the completed result. The taskId is pulled from SPAWN's
+      #    `task` data artifact via a CEL data expression (the chaining proof).
+      - name: collect
+        description: Await the durable task's terminal result (CEL-chained taskId).
+        task:
+          type: model_method
+          modelIdOrName: absurd-wf
+          methodName: awaitResult
+          inputs:
+            taskId: ${{ data.findBySpec("absurd-wf", "task")[0].attributes.taskId }}
+            timeoutSeconds: 60
+        dependsOn:
+          - step: emit
+            condition:
+              type: succeeded

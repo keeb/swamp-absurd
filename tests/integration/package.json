@@ -1,0 +1,13 @@
+{
+  "name": "absurd-swamp-integration-test",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "End-to-end harness proving the swamp <-> absurd integration: a worker runs durable tasks while swamp's @keeb/absurd extension drives the queue.",
+  "scripts": {
+    "worker": "node worker.ts"
+  },
+  "dependencies": {
+    "pg": "8.13.1"
+  }
+}

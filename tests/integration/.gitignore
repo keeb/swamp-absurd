@@ -1,0 +1,9 @@
+# Installed runtime dep
+node_modules/
+package-lock.json
+
+# Vendored SDK source (refreshed from the absurd repo by run.sh on each run)
+absurd-sdk.ts
+
+# Worker runtime log
+worker.log

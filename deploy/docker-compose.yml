@@ -1,0 +1,27 @@
+# Postgres service for the absurd durable-execution system.
+# Connection string (host): postgresql://absurd:absurd@localhost:5432/absurd
+services:
+  postgres:
+    image: postgres:16
+    container_name: absurd-postgres
+    environment:
+      POSTGRES_USER: absurd
+      POSTGRES_PASSWORD: absurd
+      POSTGRES_DB: absurd
+    ports:
+      - "5432:5432"
+    volumes:
+      - absurd-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # pg_isready lets dependents wait until Postgres is actually accepting
+      # connections (the `default` healthy condition in `depends_on`).
+      test: ["CMD-SHELL", "pg_isready -U absurd -d absurd"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  absurd-pgdata:
+    name: absurd-pgdata

@@ -1,0 +1,10 @@
+type: '@keeb/absurd'
+typeVersion: 2026.05.27.2
+id: e35c12c7-506f-4098-b1ea-341c577ea1a6
+name: absurd-crashtest
+version: 1
+tags: {}
+globalArguments:
+  connectionString: 'postgresql://absurd:absurd@localhost:5432/absurd'
+  queue: crashtest
+methods: {}
